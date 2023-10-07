@@ -8,6 +8,7 @@ interface ThemeContextType {
 // Create a context
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const [mode, setMode] = useState("");
@@ -21,18 +22,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setMode("dark");
         document.documentElement.classList.add("dark");
       }
-    }
+    }}
 
-    useEffect(() => {
-      handleThemeChange();
-    }, [mode]);
+    // useEffect(() => {
+    //   handleThemeChange();
+    // }, [mode]);
 
     return (
       <ThemeContext.Provider value={{ mode, setMode }}>
         {children}
       </ThemeContext.Provider>
     );
-  };
+  ;
 
 }
 
