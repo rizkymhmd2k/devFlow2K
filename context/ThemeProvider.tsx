@@ -15,20 +15,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const [mode, setMode] = useState("");
 
+
   const handleThemeChange = () => {
-    if (mode === "dark") {
-      setMode("light");
-      document.documentElement.classList.add("light");
+    if (localStorage.theme === "dark"  || 
+      (!("theme" in localStorage) 
+      && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      setMode("dark");
+      // explain, is it putting css on body ?
+      document.documentElement.classList.add("dark");
     } else {
-      if (mode === "light") {
-        setMode("dark");
-        document.documentElement.classList.add("dark");
-      }
+        setMode("light");
+        document.documentElement.classList.remove("dark");
+  
     }}
 
-    // useEffect(() => {
-    //   handleThemeChange();
-    // }, [mode]);
+    useEffect(() => {
+      handleThemeChange();
+    }, [mode]);
+
+    // console.log('local', localStorage)
 
     return (
       <ThemeContext.Provider value={{ mode, setMode }}>
@@ -50,8 +56,3 @@ export function useTheme() {
     return context;
   }
   
-
-// value={{
-//     mode: mode,
-//     setMode: setMode
-//   }}
