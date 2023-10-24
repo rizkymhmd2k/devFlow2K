@@ -50,10 +50,10 @@ export const Question = ({ mongoUserId }: Props) => {
       // make an async call to your API -> create a question
       // contain all form data
       await createQuestion({
-        // title: values.title,
-        // content: values.explanation,
-        // tags: values.tags,
-        // author: JSON.parse(mongoUserId),
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: JSON.parse(mongoUserId),
         // path: pathname,
       });
       // navigate to home page
