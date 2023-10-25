@@ -4,25 +4,25 @@ import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 // import { Question } from "@/components/forms/Question";
 import { connectToDatabase } from "../mongoose"
-// import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
-// import User from "@/database/user.model";
-// import { revalidatePath } from "next/cache";
+import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import User from "@/database/user.model";
+import { revalidatePath } from "next/cache";
 
-// export async function getQuestions(params: GetQuestionsParams) {
-//   try {
-//     connectToDatabase();
+export async function getQuestions(params: GetQuestionsParams) {
+  try {
+    connectToDatabase();
 
-//     const questions = await Question.find({})
-//       .populate({ path: 'tags', model: Tag })
-//       .populate({ path: 'author', model: User })
-//       .sort({ createdAt: -1 })
+    const questions = await Question.find({})
+      .populate({ path: 'tags', model: Tag })
+      .populate({ path: 'author', model: User })
+      .sort({ createdAt: -1 })
 
-//     return { questions };
-//   } catch (error) {
-//     console.log(error)
-//     throw error;
-//   }
-// }
+    return { questions };
+  } catch (error) {
+    console.log(error)
+    throw error;
+  }
+}
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -60,7 +60,10 @@ export async function createQuestion(params: CreateQuestionParams) {
     // Increment author's reputation by +5 for creating a question
 
     revalidatePath(path)
+    console.log('Question and tags created successfully.');
+
   } catch (error) {
-    
+    console.error('Error creating question:', error);
+
   }
 }

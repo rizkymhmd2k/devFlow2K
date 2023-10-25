@@ -12,7 +12,7 @@ export async function getUserById(params: any) {
     const { userId } = params;
     console.log('Fetching user with ID:', userId); // Add this line
     // const user = await User.findOne({ clerkId: userId });
-    const user = await User.findOne({ clerkId: userId }).maxTimeMS(30000); // Set timeout to 30 seconds
+    const user = await User.findOne({ clerkId: userId }).maxTimeMS(60000); // Set timeout to 30 seconds
 
     console.log('User found:', user); // Add this line
 

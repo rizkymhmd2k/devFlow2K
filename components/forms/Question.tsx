@@ -30,8 +30,8 @@ interface Props {
 export const Question = ({ mongoUserId }: Props) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const router = useRouter();
-  // const pathname = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionsSchema>>({
@@ -54,10 +54,10 @@ export const Question = ({ mongoUserId }: Props) => {
         content: values.explanation,
         tags: values.tags,
         author: JSON.parse(mongoUserId),
-        // path: pathname,
+        path: pathname,
       });
       // navigate to home page
-      // router.push('/');
+      router.push('/');
     } catch (error) {
     } finally {
       setIsSubmitting(false);

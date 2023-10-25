@@ -7,7 +7,9 @@ export interface IQuestion extends Document {
   views: number;
   upvotes: Schema.Types.ObjectId[];
   downvotes: Schema.Types.ObjectId[];
-  author: Schema.Types.ObjectId;
+  // author: Schema.Types.ObjectId;
+  // author: Schema.Types.Mixed;
+  author: string; // Changed to string
   answers: Schema.Types.ObjectId[];
   createdAt: Date;
 }
@@ -19,7 +21,9 @@ const QuestionSchema = new Schema({
   views: { type: Number, default: 0 },
   upvotes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   downvotes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  // author: { type: Schema.Types.ObjectId, ref: 'User' },
+  // author: { type: Schema.Types.Mixed, required: true }, // Accepts both ObjectId and string
+  author: { type: String, required: true }, // Changed to string
   answers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
   createdAt: { type: Date, default: Date.now }
 })
