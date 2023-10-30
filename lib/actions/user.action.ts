@@ -2,50 +2,83 @@
 
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose"
-
-// export async function getUserById(params: any) {
-//   try {
-//     connectToDatabase();
-//     console.log('getUserById function called'); // Add this line
-
-
-//     const { userId } = params;
-//     console.log('Fetching user with ID:', userId); // Add this line
-//     // const user = await User.findOne({ clerkId: userId });
-//     const user = await User.findOne({ clerkId: userId }).maxTimeMS(60000); // Set timeout to 30 seconds
-
-//     console.log('User found:', user); // Add this line
-
-//     return user;
-//   } catch (error) {
-//     console.log('iyaam',error);
-//     throw error;
-//   }
-// }
-
-// Import User and connectToDatabase as needed
+import { CreateUserParams, DeleteUserParams, UpdateUserParams } from "./shared.types";
+import { revalidatePath } from "next/cache";
+import Question from "@/database/question.model";
 
 export async function getUserById(params: any) {
   try {
-    // Ensure you're awaiting the database connection.
-    await connectToDatabase();
-    console.log('getUserById function called');
+    connectToDatabase();
 
     const { userId } = params;
-    console.log('Fetching user with ID:', userId);
 
-    // Adjust the timeout for the findOne operation
-    const user = await User.findOne({ clerkId: userId }).maxTimeMS(100000); // Set timeout to 60 seconds
+    const user = await User.findOne({ clerkId: userId });
 
-    if (user) {
-      console.log('User found:', user);
-      return user;
-    } else {
-      console.log('User not found');
-      return null; // Return null if the user is not found
-    }
+    return user;
   } catch (error) {
-    console.error('An error occurred:', error);
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function createUser(userData: CreateUserParams) {
+  try {
+    connectToDatabase();
+
+    const newUser = await User.create(userData);
+
+    return newUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function updateUser(params: UpdateUserParams) {
+  try {
+    connectToDatabase();
+
+    const { clerkId, updateData, path } = params;
+
+    await User.findOneAndUpdate({ clerkId }, updateData, {
+      new: true,
+    });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteUser(params: DeleteUserParams) {
+  try {
+    connectToDatabase();
+
+    const { clerkId } = params;
+
+    const user = await User.findOneAndDelete({ clerkId });
+
+    if(!user) {
+      throw new Error('User not found');
+    }
+
+    // Delete user from database
+    // and questions, answers, comments, etc.
+
+    // get user question ids
+    // const userQuestionIds = await Question.find({ author: user._id}).distinct('_id');
+
+    // delete user questions
+    await Question.deleteMany({ author: user._id });
+
+    // TODO: delete user answers, comments, etc.
+
+    const deletedUser = await User.findByIdAndDelete(user._id);
+
+    return deletedUser;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 }
