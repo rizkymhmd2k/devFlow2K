@@ -82,7 +82,7 @@ export async function POST(req: Request) {
         picture: image_url,
       },
       path: `/profile/${id}`
-    })
+    }) 
 
     return NextResponse.json({ message: 'OK', user: mongoUser})
   }
@@ -103,3 +103,4 @@ export async function POST(req: Request) {
 
 // knp kd semua direturn di user action
 // update and delete
+// qeustion model diganti say..
