@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
+// @ts-ignore
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.action'
 import { NextResponse } from 'next/server'
@@ -52,8 +53,7 @@ export async function POST(req: Request) {
  
   const eventType = evt.type;
 
-  // console.log({eventType})
-  // add comments
+  console.log({eventType})
  
   if(eventType === 'user.created') {
     const { id, email_addresses, image_url, username, first_name, last_name } = evt.data;
@@ -83,7 +83,7 @@ export async function POST(req: Request) {
         picture: image_url,
       },
       path: `/profile/${id}`
-    }) 
+    })
 
     return NextResponse.json({ message: 'OK', user: mongoUser})
   }
@@ -101,7 +101,3 @@ export async function POST(req: Request) {
   return new Response('', { status: 201 })
 }
  
-
-// knp kd semua direturn di user action
-// update and delete
-// qeustion model diganti say..
