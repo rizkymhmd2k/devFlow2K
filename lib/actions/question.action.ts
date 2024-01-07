@@ -2,9 +2,8 @@
 
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
-// import { Question } from "@/components/forms/Question";
 import { connectToDatabase } from "../mongoose"
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 
@@ -30,7 +29,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     const { title, content, tags, author, path } = params;
 
-    // // Create the question
+    // Create the question
     const question = await Question.create({
       title,
       content,
@@ -40,7 +39,6 @@ export async function createQuestion(params: CreateQuestionParams) {
     const tagDocuments = [];
 
     // Create the tags or get them if they already exist
-   // Another way to loop through an array without using the traditional for loop format is by utilizing the for...of loop. This loop is specifically designed for iterating over the values of an iterable object, such as an array. 
     for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } }, 
@@ -60,10 +58,24 @@ export async function createQuestion(params: CreateQuestionParams) {
     // Increment author's reputation by +5 for creating a question
 
     revalidatePath(path)
-    console.log('Question and tags created successfully.');
-
   } catch (error) {
-    console.error('Error creating question:', error);
+    
+  }
+}
 
+export async function getQuestionById(params: GetQuestionByIdParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId } = params;
+
+    const question = await Question.findById(questionId)
+      .populate({ path: 'tags', model: Tag, select: '_id name'})
+      .populate({ path: 'author', model: User, select: '_id clerkId name picture'})
+
+      return question;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }
