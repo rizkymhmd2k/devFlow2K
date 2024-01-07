@@ -43,6 +43,8 @@ export const Question = ({ mongoUserId }: Props) => {
     },
   });
 
+  // console.log('form', form)
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
     setIsSubmitting(true);
