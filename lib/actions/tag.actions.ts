@@ -67,7 +67,7 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
       throw new Error('Tag not found');
     }
 
-    console.log(tag)
+    // console.log('tagbabi', tag)
     
     const questions = tag.questions;
 
