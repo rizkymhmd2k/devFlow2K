@@ -15,7 +15,7 @@ export default async function Home() {
     clerkId: userId,
   });
 
-  // console.log('result page', result);
+  // console.log('result page', result);adasdadsa
 
   return (
     <>
