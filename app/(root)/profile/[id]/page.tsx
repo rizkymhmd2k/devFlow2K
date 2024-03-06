@@ -15,8 +15,8 @@ import AnswersTab from '@/components/shared/AnswersTab'
 
 const Page = async ({ params, searchParams}: URLProps) => {
   const { userId: clerkId } = auth();
-//   console.log('params', params)
-//   console.log('userId', clerkId)
+  // console.log('params', params)
+  // console.log('userId', clerkId)
 //     its same
   const userInfo = await getUserInfo({ userId: params.id})
 
@@ -58,11 +58,11 @@ const Page = async ({ params, searchParams}: URLProps) => {
                 />
             </div>
 
-            {/* {userInfo.user.bio && (
+            {userInfo.user.bio && (
               <p className="paragraph-regular text-dark400_light800 mt-8">
                 {userInfo.user.bio}
               </p>
-            )} */}
+            )} 
           </div>
         </div>
 

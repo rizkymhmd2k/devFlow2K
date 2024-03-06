@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 const Page = async () => {
   const result = await getAllTags({})
-//   console.log('All Tags:', result.tags);
+  // console.log('All Tags:', result);
 
 
   return (

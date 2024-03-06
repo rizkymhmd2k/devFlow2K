@@ -32,6 +32,7 @@ export async function getAllTags(params: GetAllTagsParams) {
     connectToDatabase();
 
     const tags = await Tag.find({});
+    // console.log('tagstags',tags);
 
     return { tags }
   } catch (error) {

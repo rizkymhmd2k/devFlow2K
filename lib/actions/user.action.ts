@@ -159,11 +159,14 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
       ]
     })
 
+    // console.log('user saved wkwk', user)
+
     if(!user) {
       throw new Error('User not found');
     }
 
     const savedQuestions = user.saved;
+    // console.log('result action', savedQuestions)
 
     return { questions: savedQuestions };
   } catch (error) {
