@@ -4,35 +4,42 @@ import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.action'
 import { NextResponse } from 'next/server'
- 
+
 export async function POST(req: Request) {
+  console.log('Webhook received:', req); // Log the incoming request
  
-  // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhookkd
+  // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET
+  console.log('WEBHOOK_SECRET:', WEBHOOK_SECRET); // Log the webhook secret
  
   if (!WEBHOOK_SECRET) {
+    console.error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
     throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
   }
  
   // Get the headers
   const headerPayload = headers();
+  console.log('Headers:', headerPayload); // Log the headers
   const svix_id = headerPayload.get("svix-id");
   const svix_timestamp = headerPayload.get("svix-timestamp");
   const svix_signature = headerPayload.get("svix-signature");
  
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error occured -- no svix headers', {
+    console.error('Error occurred -- no svix headers');
+    return new Response('Error occurred -- no svix headers', {
       status: 400
     })
   }
  
   // Get the body
   const payload = await req.json()
+  console.log('Payload:', payload); // Log the payload
   const body = JSON.stringify(payload);
  
   // Create a new SVIX instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
+  console.log('Webhook instance created:', wh); // Log the webhook instance
  
   let evt: WebhookEvent
  
@@ -45,17 +52,18 @@ export async function POST(req: Request) {
     }) as WebhookEvent
   } catch (err) {
     console.error('Error verifying webhook:', err);
-    return new Response('Error occured', {
+    return new Response('Error occurred', {
       status: 400
     })
   }
  
   const eventType = evt.type;
-
-  console.log({eventType})
+  console.log('Received event type:', eventType); // Log the event type
  
   if(eventType === 'user.created') {
+    console.log('Processing user created event...');
     const { id, email_addresses, image_url, username, first_name, last_name } = evt.data;
+    console.log('User data:', { id, email_addresses, image_url, username, first_name, last_name }); // Log user data
 
     // Create a new user in your database
     const mongoUser = await createUser({
@@ -66,13 +74,16 @@ export async function POST(req: Request) {
       picture: image_url,
     })
 
+    console.log('User created:', mongoUser); // Log the created user
     return NextResponse.json({ message: 'OK', user: mongoUser})
   }
   
   if(eventType === 'user.updated') {
+    console.log('Processing user updated event...');
     const { id, email_addresses, image_url, username, first_name, last_name } = evt.data;
+    console.log('User data:', { id, email_addresses, image_url, username, first_name, last_name }); // Log user data
 
-    // Create a new user in your database
+    // Update user in your database
     const mongoUser = await updateUser({
       clerkId: id,
       updateData: {
@@ -84,19 +95,24 @@ export async function POST(req: Request) {
       path: `/profile/${id}`
     })
 
+    console.log('User updated:', mongoUser); // Log the updated user
     return NextResponse.json({ message: 'OK', user: mongoUser})
   }
 
   if(eventType === 'user.deleted') {
+    console.log('Processing user deleted event...');
     const { id } = evt.data;
+    console.log('User ID:', id); // Log user ID
 
+    // Delete user from your database
     const deletedUser = await deleteUser({
       clerkId: id!,
     })
 
+    console.log('User deleted:', deletedUser); // Log the deleted user
     return NextResponse.json({ message: 'OK', user: deletedUser})
   }
  
+  console.log('Unknown event type:', eventType); // Log unknown event type
   return new Response('', { status: 201 })
 }
- 
