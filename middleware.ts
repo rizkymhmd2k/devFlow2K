@@ -7,21 +7,18 @@ export default authMiddleware({
     'question/:id',
     '/tags',
     '/tags/:id',
-    '/profile/:id',
+    '/profile',
+    '/profile/*', // Include the wildcard route for dynamic profiles
     '/community',
-    '/jobs', 
-    'profile',
-    'ask-question',
-    'collection',
-
-
+    '/jobs'
   ],
   ignoredRoutes: [
-    '/api/webhook', '/api/chatgpt'
+    '/api/webhook',
+    '/api/chatgpt',
+    '/profile' // Add '/profile' to ignoredRoutes temporarily
   ]
 });
  
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
- 
