@@ -37,6 +37,7 @@ export async function createUser(userData: CreateUserParams) {
 export async function updateUser(params: UpdateUserParams) {
   try {
     connectToDatabase();
+    console.log('params', params)
 
     const { clerkId, updateData, path } = params;
 
