@@ -4,18 +4,16 @@ export default authMiddleware({
   publicRoutes: [
     '/',
     '/api/webhook',
-    'question/:id',
+    '/questions/:id', // Include /questions/:id in the public routes
     '/tags',
     '/tags/:id',
-    '/profile',
-    '/profile/*', // Include the wildcard route for dynamic profiles
+    '/profile/:id',
     '/community',
     '/jobs'
   ],
   ignoredRoutes: [
-    '/api/webhook',
-    '/api/chatgpt',
-    '/profile' // Add '/profile' to ignoredRoutes temporarily
+    '/api/webhook', 
+    '/api/chatgpt'
   ]
 });
  
