@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from '@/components/ui/button'
 import { HomePageFilters } from '@/constants/filters'
 import React from 'react'
+import { Button } from '../ui/button'
 
 const HomeFilters = () => {
   const active = 'frequent'

@@ -1,5 +1,5 @@
 import QuestionCard from "@/components/cards/QuestionCard";
-// import HomeFilters from "@/components/home/HomeFilters";
+import HomeFilters from "@/components/home/HomeFilters";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
@@ -11,9 +11,6 @@ import Link from "next/link";
 export default async function Home() {
   const result = await getQuestions({});
 
-
-  // no more
-  // what is home
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -42,7 +39,7 @@ export default async function Home() {
         />
       </div>
 
-      {/* <HomeFilters /> */}
+      <HomeFilters />
 
       <div className="mt-10 flex w-full flex-col gap-6">
         {result.questions.length > 0 ?
