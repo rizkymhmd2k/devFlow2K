@@ -80,10 +80,7 @@ export const formUrlQuery = ({ params, key, value}: UrlQueryParams) => {
   // [Log] currentUrl – {q: "how to make"}
 
   currentUrl[key] = value;
-  // console.log('value',value)
-  // value"how to make"
-
-
+ 
   return qs.stringifyUrl({
     url: window.location.pathname,
     query: currentUrl,
