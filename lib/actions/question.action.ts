@@ -8,15 +8,33 @@ import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import Answer from "@/database/answer.model";
 import Interaction from "@/database/interaction.model";
+import { FilterQuery } from "mongoose";
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
 
-    const questions = await Question.find({})
+    const { searchQuery } = params;
+    // console.log(searchQuery);
+
+    const query: FilterQuery<typeof Question> = {};
+
+    if(searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, "i")}},
+        { content: { $regex: new RegExp(searchQuery, "i")}},
+      ]
+    }
+
+    // console.log('queque',query);
+
+
+    const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User })
       .sort({ createdAt: -1 })
+
+      // console.log('questions', questions);
 
     return { questions };
   } catch (error) {
