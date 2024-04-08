@@ -73,10 +73,14 @@ interface UrlQueryParams {
 
 export const formUrlQuery = ({ params, key, value}: UrlQueryParams) => {
 
-  // console.log('params, key, value', params, key, value);
-  // params, key, value"q=how+to+make""q""how to make"
+    console.log('params', params);
+    console.log('key', key);
+    console.log('value', value);
+
   const currentUrl = qs.parse(params);
-  // console.log('currentUrl',currentUrl)
+
+  console.log('currentUrl',currentUrl)
+
   // [Log] currentUrl – {q: "how to make"}
 
   currentUrl[key] = value;
