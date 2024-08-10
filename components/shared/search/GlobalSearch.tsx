@@ -18,7 +18,7 @@ const GlobalSearch = () => {
   const [search, setSearch] = useState(query || '');
   const [isOpen, setIsOpen] = useState(false);
   
-  console.log('search', searchParams.toString());
+  console.log('query', searchParams.toString());
 
 
   useEffect(() => {

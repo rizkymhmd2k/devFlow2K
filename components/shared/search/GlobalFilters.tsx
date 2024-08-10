@@ -25,7 +25,6 @@ const GlobalFilters = () => {
 
       router.push(newUrl, { scroll: false });
     } else {
-      setActive(item);
 
       const newUrl = formUrlQuery({
         params: searchParams.toString(),
@@ -51,7 +50,8 @@ const GlobalFilters = () => {
                 : 'bg-light-700 text-dark-400 hover:text-primary-500 dark:bg-dark-500'
               }
             `}
-            onClick={() => handleTypeClick(item.value)}
+            onClick={() => 
+              handleTypeClick(item.value)}
           >
             {item.name}
           </button>
